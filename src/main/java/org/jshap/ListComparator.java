@@ -3,18 +3,44 @@ package org.jshap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.Random;
 
-// Хотелось бы обернуть методы списков в лямбда функцию и засунуть в метод,
-// который проводит замеры времени
+/**
+ * Класс сравнения производительности LinkedList и ArrayList
+ * @author jshap
+ */
+public final class ListComparator {
+    private final int MAX_SIZE;
+    private final int OPERATIONS; // <= SIZE / 2
 
-public class ListComparator {
-    private static final int SIZE = 100000;
-    private static final int OPERATIONS = 50000; // <= SIZE / 2
+    /**
+     * Конструктор по умолчанию
+     */
+    public ListComparator() {
+        MAX_SIZE = 2000;
+        OPERATIONS = 1000;
+    }
 
-    public static void compare() {
-        List<Integer> linkedList = prepareList(new LinkedList<>());
-        List<Integer> arrayList = prepareList(new ArrayList<>());
+    /**
+     * Конструктор с параметрами
+     * @param MAX_SIZE максимальный размер списка
+     * @param OPERATIONS количество операций
+     * @throws IllegalArgumentException при неправильных аргументах
+     */
+    public ListComparator(final int MAX_SIZE, final int OPERATIONS) {
+        if (OPERATIONS > MAX_SIZE / 2) {
+            throw new IllegalArgumentException("Invalid argument " + OPERATIONS + " > " + MAX_SIZE);
+        }
+
+        this.MAX_SIZE = MAX_SIZE;
+        this.OPERATIONS = OPERATIONS;
+    }
+
+    /**
+     * Метод, который собирает замеры производительности и строит таблицу
+     */
+    public void compare() {
+        List<Integer> linkedList = new LinkedList<>();
+        List<Integer> arrayList = new ArrayList<>();
 
         long linkedListAddFirstTime = measureOperation(linkedList, "addFirst");
         long arrayListAddFirstTime = measureOperation(arrayList, "addFirst");
@@ -51,57 +77,102 @@ public class ListComparator {
         System.out.println(" removeLast\t\t" + linkedListRemoveLastTime + "\t\t\t" + arrayListRemoveLastTime);
     }
 
-    private static List<Integer> prepareList(List<Integer> list) {
-        Random random = new Random();
+    /**
+     * Метод, где проводятся замеры
+     * @param list ссылка на список, над которым будут производиться манипуляции
+     * @param method название метода
+     * @return время в ms
+     * @throws RuntimeException при нереализованном методе/неправильном имени
+     */
+    private long measureOperation(List<Integer> list, final String method) {
+        prepareList(list, method);
 
-        while (list.size() > SIZE) {
-            list.removeFirst();
+        switch (method) {
+            case "addFirst" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.addFirst(i);
+                    }
+                });
+            }
+            case "addMid" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.add(list.size() / 2, i);
+                    }
+                });
+            }
+            case "addLast" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.addLast(i);
+                    }
+                });
+            }
+            case "getBegin" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.get(i);
+                    }
+                });
+            }
+            case "getMid" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.get((int) (Math.ceil(list.size() / 2.) - 1 - i));
+                    }
+                });
+            }
+            case "getEnd" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.get(list.size() - 1 - i);
+                    }
+                });
+            }
+            case "removeFirst" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.removeFirst();
+                    }
+                });
+            }
+            case "removeMid" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.remove(list.size() / 2);
+                    }
+                });
+            }
+            case "removeLast" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        list.removeLast();
+                    }
+                });
+            }
+            default -> throw new RuntimeException("Unrealized method " + method);
         }
-
-        while (list.size() < SIZE) {
-            list.addFirst(random.nextInt());
-        }
-
-        return list;
     }
 
-    private static long measureOperation(List<Integer> list, final String operation) {
-        Random random = new Random();
-        prepareList(list);
-        long beginTime = System.currentTimeMillis();
-
-        for (int i = 0; i < Math.min(OPERATIONS, SIZE); ++i) {
-            switch (operation) {
-                case"addFirst":
-                    list.addFirst(random.nextInt());
-                    break;
-                case"addMid":
-                    list.add(list.size() / 2, random.nextInt());
-                    break;
-                case"addLast":
-                    list.addLast(random.nextInt());
-                    break;
-                case"getBegin":
-                    list.get(i);
-                    break;
-                case"getMid":
-                    list.get((int) (Math.ceil(list.size() / 2.) - 1 - i));
-                    break;
-                case"getEnd":
-                    list.get(list.size() - 1 - i);
-                    break;
-                case"removeFirst":
-                    list.removeFirst();
-                    break;
-                case"removeMid":
-                    list.remove(list.size() / 2);
-                    break;
-                case"removeLast":
-                    list.removeLast();
-                    break;
-            }
+    /**
+     * Метод, который занимается подготовкой списка к тесту
+     * @param list ссылка на список, над которым будут производиться манипуляции
+     * @param method название метода
+     */
+    private void prepareList(List<Integer> list, final String method) {
+        if (list instanceof LinkedList<Integer>) {
+            list = new LinkedList<>();
+        } else {
+            list = new ArrayList<>();
         }
 
-        return System.currentTimeMillis() - beginTime;
+        if (method.contains("add")) {
+            return;
+        }
+
+        for (int i = 0; i < MAX_SIZE; ++i) {
+            list.add(i);
+        }
     }
 }
