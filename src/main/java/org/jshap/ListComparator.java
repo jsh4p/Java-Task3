@@ -60,94 +60,164 @@ public final class ListComparator {
         long arrayListRemoveMidTime = measureOperation(arrayList, "removeMid");
         long linkedListRemoveLastTime = measureOperation(linkedList, "removeLast");
         long arrayListRemoveLastTime = measureOperation(arrayList, "removeLast");
+        long linkedListRemoveIfTime = measureOperation(linkedList, "removeIf");
+        long arrayListRemoveIfTime = measureOperation(arrayList, "removeIf");
+        long linkedListContainsBeginTime = measureOperation(linkedList, "containsBegin");
+        long arrayListContainsBeginTime = measureOperation(arrayList, "containsBegin");
+        long linkedListContainsMidTime = measureOperation(linkedList, "containsMid");
+        long arrayListContainsMidTime = measureOperation(arrayList, "containsMid");
+        long linkedListContainsEndTime = measureOperation(linkedList, "containsEnd");
+        long arrayListContainsEndTime = measureOperation(arrayList, "containsEnd");
+        long linkedListSetBeginTime = measureOperation(linkedList, "setBegin");
+        long arrayListSetBeginTime = measureOperation(arrayList, "setBegin");
+        long linkedListSetMidTime = measureOperation(linkedList, "setMid");
+        long arrayListSetMidTime = measureOperation(arrayList, "setMid");
+        long linkedListSetEndTime = measureOperation(linkedList, "setEnd");
+        long arrayListSetEndTime = measureOperation(arrayList, "setEnd");
 
         System.out.println("----------------------------------");
         System.out.println("Operation\tLinkedList\tArrayList");
-        System.out.println("-   Add    -----------------------");
-        System.out.println("  addFirst \t\t" + linkedListAddFirstTime + "\t\t\t" + arrayListAddFirstTime);
-        System.out.println("   addMid  \t\t" + linkedListAddMidTime + "\t\t" + arrayListAddMidTime);
-        System.out.println("   addLast \t\t" + linkedListAddLastTime + "\t\t\t" + arrayListAddLastTime);
-        System.out.println("-   Get    -----------------------");
-        System.out.println("  getBegin \t\t" + linkedListGetBeginTime + "\t\t" + arrayListGetBeginTime);
-        System.out.println("   getMid  \t\t" + linkedListGetMidTime + "\t\t" + arrayListGetMidTime);
-        System.out.println("   getEnd  \t\t" + linkedListGetEndTime + "\t\t" + arrayListGetEndTime);
-        System.out.println("-  Remove  -----------------------");
-        System.out.println("removeFirst\t\t" + linkedListRemoveFirstTime + "\t\t\t" + arrayListRemoveFirstTime);
-        System.out.println(" removeMid \t\t" + linkedListRemoveMidTime + "\t\t" + arrayListRemoveMidTime);
-        System.out.println(" removeLast\t\t" + linkedListRemoveLastTime + "\t\t\t" + arrayListRemoveLastTime);
+        System.out.println("-     Add    ---------------------");
+        System.out.println("   addFirst  \t" + linkedListAddFirstTime + "\t\t\t" + arrayListAddFirstTime);
+        System.out.println("    addMid   \t" + linkedListAddMidTime + "\t\t\t" + arrayListAddMidTime);
+        System.out.println("   addLast   \t" + linkedListAddLastTime + "\t\t\t" + arrayListAddLastTime);
+        System.out.println("-    Get     ---------------------");
+        System.out.println("   getBegin  \t" + linkedListGetBeginTime + "\t\t" + arrayListGetBeginTime);
+        System.out.println("    getMid   \t" + linkedListGetMidTime + "\t\t" + arrayListGetMidTime);
+        System.out.println("    getEnd   \t" + linkedListGetEndTime + "\t\t" + arrayListGetEndTime);
+        System.out.println("-   Remove   ---------------------");
+        System.out.println(" removeFirst \t" + linkedListRemoveFirstTime + "\t\t\t" + arrayListRemoveFirstTime);
+        System.out.println("  removeMid  \t" + linkedListRemoveMidTime + "\t\t" + arrayListRemoveMidTime);
+        System.out.println("  removeLast \t" + linkedListRemoveLastTime + "\t\t\t" + arrayListRemoveLastTime);
+        System.out.println("   removeIf  \t" + linkedListRemoveIfTime + "\t\t\t" + arrayListRemoveIfTime);
+        System.out.println("-  Contains  ---------------------");
+        System.out.println("containsBegin\t" + linkedListContainsBeginTime + "\t\t" + arrayListContainsBeginTime);
+        System.out.println(" containsMid \t" + linkedListContainsMidTime + "\t\t" + arrayListContainsMidTime);
+        System.out.println(" containsEnd \t" + linkedListContainsEndTime + "\t\t" + arrayListContainsEndTime);
+        System.out.println("-    Set     ---------------------");
+        System.out.println("   setBegin  \t" + linkedListSetBeginTime + "\t\t" + arrayListSetBeginTime);
+        System.out.println("    setMid   \t" + linkedListSetMidTime + "\t\t" + arrayListSetMidTime);
+        System.out.println("    setEnd   \t" + linkedListSetEndTime + "\t\t" + arrayListSetEndTime);
     }
 
     /**
      * Метод, где проводятся замеры
-     * @param list ссылка на список, над которым будут производиться манипуляции
+     * @param list ссылка на список, происхождение которого будем узнавать
      * @param method название метода
      * @return время в ms
      * @throws RuntimeException при нереализованном методе/неправильном имени
      */
     private long measureOperation(List<Integer> list, final String method) {
-        prepareList(list, method);
+        List<Integer> preparedList = prepareList(list, method);
 
         switch (method) {
             case "addFirst" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.addFirst(i);
+                        preparedList.addFirst(-1);
                     }
                 });
             }
             case "addMid" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.add(list.size() / 2, i);
+                        preparedList.add(preparedList.size() / 2, -1);
                     }
                 });
             }
             case "addLast" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.addLast(i);
+                        preparedList.addLast(-1);
                     }
                 });
             }
             case "getBegin" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.get(i);
+                        preparedList.get(i);
                     }
                 });
             }
             case "getMid" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.get((int) (Math.ceil(list.size() / 2.) - 1 - i));
+                        preparedList.get(preparedList.size() / 2 - i);
                     }
                 });
             }
             case "getEnd" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.get(list.size() - 1 - i);
+                        preparedList.get(preparedList.size() - 1 - i);
                     }
                 });
             }
             case "removeFirst" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.removeFirst();
+                        preparedList.removeFirst();
                     }
                 });
             }
             case "removeMid" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.remove(list.size() / 2);
+                        preparedList.remove(preparedList.size() / 2);
                     }
                 });
             }
             case "removeLast" -> {
                 return TimeMesurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
-                        list.removeLast();
+                        preparedList.removeLast();
+                    }
+                });
+            }
+            case "removeIf" -> {
+                return TimeMesurer.timing(() -> {
+                    preparedList.removeIf(n -> (n % 2 == 0));
+                });
+            }
+            case "containsBegin" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        preparedList.contains(i);
+                    }
+                });
+            }
+            case "containsMid" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        preparedList.contains(preparedList.size() / 2 - i);
+                    }
+                });
+            }
+            case "containsEnd" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        preparedList.contains(preparedList.size() - 1 - i);
+                    }
+                });
+            }
+            case "setBegin" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        preparedList.set(i, -1);
+                    }
+                });
+            }
+            case "setMid" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        preparedList.set(preparedList.size() / 2 - i, -1);
+                    }
+                });
+            }
+            case "setEnd" -> {
+                return TimeMesurer.timing(() -> {
+                    for (int i = 0; i < OPERATIONS; ++i) {
+                        preparedList.set(preparedList.size() - 1 - i, -1);
                     }
                 });
             }
@@ -157,22 +227,23 @@ public final class ListComparator {
 
     /**
      * Метод, который занимается подготовкой списка к тесту
-     * @param list ссылка на список, над которым будут производиться манипуляции
+     * @param list ссылка на список, происхождение которого будем узнавать
      * @param method название метода
+     * @return ссылка на созданный для замеров список
      */
-    private void prepareList(List<Integer> list, final String method) {
+    private List<Integer> prepareList(List<Integer> list, final String method) {
         if (list instanceof LinkedList<Integer>) {
             list = new LinkedList<>();
         } else {
             list = new ArrayList<>();
         }
 
-        if (method.contains("add")) {
-            return;
+        if (!method.contains("add")) {
+            for (int i = 0; i < MAX_SIZE; ++i) {
+                list.add(i);
+            }
         }
 
-        for (int i = 0; i < MAX_SIZE; ++i) {
-            list.add(i);
-        }
+        return list;
     }
 }
