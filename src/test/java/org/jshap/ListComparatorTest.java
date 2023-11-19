@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ListComparatorTest {
-    // Ïðîâåðêà íà ïðîáðîñ îøèáêè ïðè íåêîððåêòíûõ ïàðàìåòðàõ êîíñòðóêòîðà
+    // ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ° Ð½Ð° Ð¿Ñ€Ð¾Ð±Ñ€Ð¾Ñ Ð¾ÑˆÐ¸Ð±ÐºÐ¸ Ð¿Ñ€Ð¸ Ð½ÐµÐºÐ¾Ñ€Ñ€ÐµÐºÑ‚Ð½Ñ‹Ñ… Ð¿Ð°Ñ€Ð°Ð¼ÐµÑ‚Ñ€Ð°Ñ… ÐºÐ¾Ð½ÑÑ‚Ñ€ÑƒÐºÑ‚Ð¾Ñ€Ð°
     @Test
     void testListComparatorWithParametersException() {
         assertThrows(IllegalArgumentException.class, () -> {
