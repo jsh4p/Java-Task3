@@ -112,110 +112,110 @@ public final class ListComparator {
 
         switch (method) {
             case "addFirst" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.addFirst(-1);
                     }
                 });
             }
             case "addMid" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.add(preparedList.size() / 2, -1);
                     }
                 });
             }
             case "addLast" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.addLast(-1);
                     }
                 });
             }
             case "getBegin" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.get(i);
                     }
                 });
             }
             case "getMid" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.get(preparedList.size() / 2 - i);
                     }
                 });
             }
             case "getEnd" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.get(preparedList.size() - 1 - i);
                     }
                 });
             }
             case "removeFirst" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.removeFirst();
                     }
                 });
             }
             case "removeMid" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.remove(preparedList.size() / 2);
                     }
                 });
             }
             case "removeLast" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.removeLast();
                     }
                 });
             }
             case "removeIf" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     preparedList.removeIf(n -> (n % 2 == 0));
                 });
             }
             case "containsBegin" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.contains(i);
                     }
                 });
             }
             case "containsMid" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.contains(preparedList.size() / 2 - i);
                     }
                 });
             }
             case "containsEnd" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.contains(preparedList.size() - 1 - i);
                     }
                 });
             }
             case "setBegin" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.set(i, -1);
                     }
                 });
             }
             case "setMid" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.set(preparedList.size() / 2 - i, -1);
                     }
                 });
             }
             case "setEnd" -> {
-                return TimeMesurer.timing(() -> {
+                return TimeMeasurer.timing(() -> {
                     for (int i = 0; i < OPERATIONS; ++i) {
                         preparedList.set(preparedList.size() - 1 - i, -1);
                     }
